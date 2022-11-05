@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AccountingEquipmentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Equipment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Type_Id" Type="Int32" />
+    <NavigationProperty Name="EquipmentType" Relationship="Self.FK_Equipment_EquipmentType" FromRole="Equipment" ToRole="EquipmentType" />
+    <NavigationProperty Name="TechnicalInspection" Relationship="Self.FK_TechnicalInspection_Equipment" FromRole="Equipment" ToRole="TechnicalInspection" />
+  </EntityType>
+  <EntityType Name="EquipmentType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Equipment" Relationship="Self.FK_Equipment_EquipmentType" FromRole="EquipmentType" ToRole="Equipment" />
+  </EntityType>
+  <EntityType Name="ProductionSite">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TechnicalInspection" Relationship="Self.FK_TechnicalInspection_ProductionSite" FromRole="ProductionSite" ToRole="TechnicalInspection" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TechnicalInspection">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Precision="0" />
+    <Property Name="ProductionSiteId" Type="Int32" />
+    <Property Name="EquipmentId" Type="Int32" />
+    <Property Name="WorkerId" Type="Int32" />
+    <Property Name="Result" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Equipment" Relationship="Self.FK_TechnicalInspection_Equipment" FromRole="TechnicalInspection" ToRole="Equipment" />
+    <NavigationProperty Name="ProductionSite" Relationship="Self.FK_TechnicalInspection_ProductionSite" FromRole="TechnicalInspection" ToRole="ProductionSite" />
+    <NavigationProperty Name="Worker" Relationship="Self.FK_TechnicalInspection_Worker" FromRole="TechnicalInspection" ToRole="Worker" />
+  </EntityType>
+  <EntityType Name="Worker">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ServiceNumber" Type="Int32" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TechnicalInspection" Relationship="Self.FK_TechnicalInspection_Worker" FromRole="Worker" ToRole="TechnicalInspection" />
+  </EntityType>
+  <Association Name="FK_Equipment_EquipmentType">
+    <End Role="EquipmentType" Type="Self.EquipmentType" Multiplicity="0..1" />
+    <End Role="Equipment" Type="Self.Equipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EquipmentType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Equipment">
+        <PropertyRef Name="Type_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TechnicalInspection_Equipment">
+    <End Role="Equipment" Type="Self.Equipment" Multiplicity="0..1" />
+    <End Role="TechnicalInspection" Type="Self.TechnicalInspection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TechnicalInspection">
+        <PropertyRef Name="EquipmentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TechnicalInspection_ProductionSite">
+    <End Role="ProductionSite" Type="Self.ProductionSite" Multiplicity="0..1" />
+    <End Role="TechnicalInspection" Type="Self.TechnicalInspection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductionSite">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TechnicalInspection">
+        <PropertyRef Name="ProductionSiteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TechnicalInspection_Worker">
+    <End Role="Worker" Type="Self.Worker" Multiplicity="0..1" />
+    <End Role="TechnicalInspection" Type="Self.TechnicalInspection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Worker">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TechnicalInspection">
+        <PropertyRef Name="WorkerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="AccountingEquipmentEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Equipment" EntityType="Self.Equipment" />
+    <EntitySet Name="EquipmentType" EntityType="Self.EquipmentType" />
+    <EntitySet Name="ProductionSite" EntityType="Self.ProductionSite" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="TechnicalInspection" EntityType="Self.TechnicalInspection" />
+    <EntitySet Name="Worker" EntityType="Self.Worker" />
+    <AssociationSet Name="FK_Equipment_EquipmentType" Association="Self.FK_Equipment_EquipmentType">
+      <End Role="EquipmentType" EntitySet="EquipmentType" />
+      <End Role="Equipment" EntitySet="Equipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TechnicalInspection_Equipment" Association="Self.FK_TechnicalInspection_Equipment">
+      <End Role="Equipment" EntitySet="Equipment" />
+      <End Role="TechnicalInspection" EntitySet="TechnicalInspection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TechnicalInspection_ProductionSite" Association="Self.FK_TechnicalInspection_ProductionSite">
+      <End Role="ProductionSite" EntitySet="ProductionSite" />
+      <End Role="TechnicalInspection" EntitySet="TechnicalInspection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TechnicalInspection_Worker" Association="Self.FK_TechnicalInspection_Worker">
+      <End Role="Worker" EntitySet="Worker" />
+      <End Role="TechnicalInspection" EntitySet="TechnicalInspection" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

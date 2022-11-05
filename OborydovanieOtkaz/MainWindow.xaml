@@ -1,0 +1,24 @@
+﻿<Window x:Class="OborydovanieOtkaz.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OborydovanieOtkaz"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800">
+    
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Учет отказа оборудования" FontSize="35"></TextBlock>
+        <Frame ContentRendered="MainFrame_ContentRendered"  NavigationUIVisibility="Hidden" Grid.Row="1" Name="MainFrame"></Frame>
+        <Button Grid.Row="2" Content="Назад" Name="BtnBack" HorizontalAlignment="Left" Click="BtnBack_Click"></Button>
+        <Button Grid.Row="2" Content="Оборудование" Name="BtnEquipment" HorizontalAlignment="Left" Click="BtnEquipment_Click"></Button>
+
+        <Button Grid.Row="2" Content="Работники" Name="BtmWorkers" HorizontalAlignment="Right" Click="BtmWorkers_Click"></Button>
+    </Grid>
+        
+</Window>
